@@ -6,7 +6,7 @@ using System.Text;
 
 public static class GenerateXP
 {
-private const int TagSize = 16; // 128 bits for GCM tag
+    private const int TagSize = 16; // 128 bits for GCM tag
     private const int NonceSize = 12; // 96 bits recommended for GCM
 
     private static string BytesToHex(byte[] bytes)
