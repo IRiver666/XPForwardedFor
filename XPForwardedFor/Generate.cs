@@ -50,4 +50,30 @@ public static class GenerateXP
 
         return BytesToHex(result);
     }
+     public static string Decrypt(string hexString, string mainKey, string guestId)
+    {
+        byte[] key = DeriveAesKey(mainKey, guestId);
+        byte[] raw = HexToBytes(hexString);
+
+        if (raw.Length < NonceSize + TagSize)
+            throw new ArgumentException("Input data too short.");
+
+        byte[] nonce = new byte[NonceSize];
+        Buffer.BlockCopy(raw, 0, nonce, 0, NonceSize);
+
+        int cipherTextLength = raw.Length - NonceSize - TagSize;
+        byte[] cipherText = new byte[cipherTextLength];
+        Buffer.BlockCopy(raw, NonceSize, cipherText, 0, cipherTextLength);
+
+        byte[] tag = new byte[TagSize];
+        Buffer.BlockCopy(raw, NonceSize + cipherTextLength, tag, 0, TagSize);
+
+        byte[] plainBytes = new byte[cipherText.Length];
+        using (var aesGcm = new AesGcm(key, TagSize))
+        {
+            aesGcm.Decrypt(nonce, cipherText, tag, plainBytes);
+        }
+
+        return Encoding.UTF8.GetString(plainBytes);
+    }
 }
