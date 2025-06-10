@@ -12,7 +12,7 @@ string baseData = @"{
     ""audio_properties"":null,
     ""created_at"":0
 }";
-string mainKey = "your-main-key";
+string mainKey = "0e6be1f1e21ffc33590b888fd4dc81b19713e570e805d4e5df80a493c9571a05";
 string guestId = "guest-id";
 string encrypted = XPForwardedFor.GenerateXP.Encrypt(baseData, mainKey, guestId);
 Console.WriteLine(encrypted);
